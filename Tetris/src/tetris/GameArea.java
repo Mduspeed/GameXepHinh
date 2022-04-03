@@ -25,7 +25,6 @@ public class GameArea extends JPanel {
         gridRows = this.getBounds().height/gridCellSize;
         
         background = new Color[gridRows][gridColumns];
-        background[0][0]= Color.green;
         
         
     }
@@ -38,7 +37,12 @@ public class GameArea extends JPanel {
     
     public boolean moveBlockDown()
     {
-        if(checkBottom()==false) return false;
+        if(checkBottom()==false) 
+        {   
+            moveBlockToBackground();
+            return false;
+        }
+        
         block.moveDown();
         repaint();
         return true;
@@ -52,6 +56,29 @@ public class GameArea extends JPanel {
         }
         return true;
     }
+    
+    private void moveBlockToBackground()
+    {
+        int[][] shape = block.getShape();
+        int h = block.getHeight();
+        int w = block.getWidth();
+        
+        int xPos =  block.getX();
+        int yPos = block.getY();
+        
+        Color color = block.getColor();
+        for(int r=0; r<h;r++)
+        {
+            for(int c=0;c<w;c++)
+            {
+                if(shape[r][c]==1)
+                {
+                    background [r+yPos][c+xPos]= color;
+                }
+            }
+        }
+    }
+    
     private void drawBlock(Graphics g)
     {
         int h = block.getHeight();
